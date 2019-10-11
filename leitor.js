@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+  let classe = []
+
   $.getJSON('classes.json', function (data) {
     resposta = data.classes
 
@@ -10,13 +12,13 @@ $(document).ready(function () {
 
 
       $('#classe').append(`<option value='${resposta[i].id}'>${resposta[i].name}</option>`);
-      
+      classe.push(resposta[i])
     }
 
 
 
   })
-
+    console.log('ddd',classe)
 
   $.getJSON('degrees.json', function (data) {
 
@@ -28,23 +30,29 @@ $(document).ready(function () {
   })
 
 
+  var obj = new Array(300).fill().map(function() {
+    return {
+        id: chance["unique"](chance.integer,{ min: 6, max: 9999 }),
+        ra: chance["integer"]({ min: 10000, max: 999999 }),
+        name: chance["unique"](chance.name,1),
+        degreeId: chance["integer"]({ min: 1, max: 13 }),
+        classId: chance["integer"]({ min: 1, max: 6 }),
+    };
+});
+
+var json = JSON.stringify(obj, null, 2); 
+
+  $('#gerador').on('click', function(){
+    for (j in obj){
+      alunos.push(obj[j])
+    }
+  })
+
+    
 
   let alunos = []
   $.getJSON('students.json', function (data) {
 
-  
-    var obj = new Array(300).fill().map(function() {
-      return {
-          id: chance["integer"]({ min: 6, max: 9999 }),
-          ra: chance["integer"]({ min: 10000, max: 999999 }),
-          name: chance["name"](),
-          degreeId: chance["integer"]({ min: 1, max: 13 }),
-          classId: chance["integer"]({ min: 1, max: 6 }),
-      };
-  });
-  
-  var json = JSON.stringify(obj, null, 2); 
-    console.log(json);
 
     for (i in data) {
     /* $('.alunos').append(`
@@ -76,10 +84,16 @@ $(document).ready(function () {
     }
     for(let i = 0; i < mostrar.length; i++){
       $('.alunos').append(`
-      <input id='aluno_${mostrar[i].id}' value='${mostrar[i].name}'>
-    `)
+      <div>
+        <input id='aluno_${mostrar[i].id}' value='${mostrar[i].name}'>
+        <input id='aluno_class_${mostrar[i].id}' value='${mostrar[i].classId}'>
+      </div>
+  `)
     $(`#aluno_${mostrar[i].id}`).on('keyup', function(){
       alunos[parseInt($(this).attr('id').split('_')[1])-1].name = $(this).val();
+    })
+    $(`#aluno_class_${mostrar[i].id}`).on('keyup', function(){
+      alunos[parseInt($(this).attr('id').split('_')[2])-1].classId = $(this).val();
     })
     } 
   }
