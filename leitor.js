@@ -38,9 +38,9 @@ $(document).ready(function () {
         degreeId: chance["integer"]({ min: 1, max: 13 }),
         classId: chance["integer"]({ min: 1, max: 6 }),
     };
-});
+  });
 
-var json = JSON.stringify(obj, null, 2); 
+  var json = JSON.stringify(obj, null, 2); 
 
   $('#gerador').on('click', function(){
     for (j in obj){
@@ -94,12 +94,71 @@ var json = JSON.stringify(obj, null, 2);
       alunos[parseInt($(this).attr('id').split('_')[1])-1].name = $(this).val();
     })
     $(`#aluno_class_${mostrar[i].id}`).on('keyup', function(){
-      console.log(alunos)
-      console.log(classeV.indexOf($(this).val()))
+      
+      
       alunos[parseInt($(this).attr('id').split('_')[2])-1].classId = classeV.indexOf($(this).val());
-      console.log(alunos)
+      filtro()
     })
-    } 
+    }
+
+    Promise.all([...alunos])
+  .then(function([...alunos]){
+    
+    let numclass = [0, 0, 0, 0, 0, 0, 0]
+    
+    alunos.map((el) => {
+      switch( el.classId ){
+        case 1:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+        case 2:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+        case 3:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+        case 4:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+        case 5:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+        case 6:
+          numclass[el.classId] = numclass[el.classId] + 1
+        break;
+      }
+    })
+    console.log(numclass)
+    
+  
+    var options = {
+    title: {
+      text: "Distribuicao de Estudantes"
+    },
+    subtitles: [{
+      text: "Estudantes por Classes"
+    }],
+    animationEnabled: true,
+    data: [{
+      type: "pie",
+      startAngle: 40,
+      toolTipContent: "<b>{label}</b>: {y}%",
+      showInLegend: "true",
+      legendText: "{label}",
+      indexLabelFontSize: 16,
+      indexLabel: "{label} - {y}%",
+      dataPoints: [
+        { y: numclass[1], label: "Classe A" },
+        { y: numclass[2], label: "Classe B" },
+        { y: numclass[3], label: "Classe C" },
+        { y: numclass[4], label: "Classe D" },
+        { y: numclass[5], label: "Classe E" },
+        { y: numclass[6], label: "Classe F" }
+      ]
+    }]}
+  
+    $(".grafico").CanvasJSChart(options);
+  })
   }
   
 
@@ -108,5 +167,9 @@ var json = JSON.stringify(obj, null, 2);
     filtro()
   })
   filtro()
-    
+
+
+  
+  
+  
 });
