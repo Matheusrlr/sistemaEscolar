@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-  let classe = []
+  let classeV = ['X','A', 'B', 'C', 'D', 'E', 'F']
 
   $.getJSON('classes.json', function (data) {
     resposta = data.classes
@@ -12,13 +12,13 @@ $(document).ready(function () {
 
 
       $('#classe').append(`<option value='${resposta[i].id}'>${resposta[i].name}</option>`);
-      classe.push(resposta[i])
+
     }
 
 
 
   })
-    console.log('ddd',classe)
+   
 
   $.getJSON('degrees.json', function (data) {
 
@@ -46,6 +46,7 @@ var json = JSON.stringify(obj, null, 2);
     for (j in obj){
       alunos.push(obj[j])
     }
+    filtro()
   })
 
     
@@ -86,14 +87,17 @@ var json = JSON.stringify(obj, null, 2);
       $('.alunos').append(`
       <div>
         <input id='aluno_${mostrar[i].id}' value='${mostrar[i].name}'>
-        <input id='aluno_class_${mostrar[i].id}' value='${mostrar[i].classId}'>
+        <input id='aluno_class_${mostrar[i].id}' value='${classeV[parseInt(mostrar[i].classId)]}'>
       </div>
   `)
     $(`#aluno_${mostrar[i].id}`).on('keyup', function(){
       alunos[parseInt($(this).attr('id').split('_')[1])-1].name = $(this).val();
     })
     $(`#aluno_class_${mostrar[i].id}`).on('keyup', function(){
-      alunos[parseInt($(this).attr('id').split('_')[2])-1].classId = $(this).val();
+      console.log(alunos)
+      console.log(classeV.indexOf($(this).val()))
+      alunos[parseInt($(this).attr('id').split('_')[2])-1].classId = classeV.indexOf($(this).val());
+      console.log(alunos)
     })
     } 
   }
